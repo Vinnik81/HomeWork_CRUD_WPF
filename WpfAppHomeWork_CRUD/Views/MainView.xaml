@@ -1,0 +1,190 @@
+﻿<Window x:Class="WpfApp_MVVM.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp_MVVM.Views" xmlns:viewmodels="clr-namespace:WpfApp_MVVM.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        mc:Ignorable="d"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        Icon="controlpanel.png"
+        x:Name="window"
+         Title="MyCRUD" FontSize="22" Height="450" Width="600">
+    <Window.Resources>
+        <Style x:Key="taskListItemTemplate" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsDone}" Value="True">
+                    <Setter Property="Foreground" Value="Green"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsDone}" Value="False">
+                    <Setter Property="Foreground" Value="Red"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="taskListTemplate">
+            <DockPanel>
+                <Button Command="{Binding ElementName=window, Path=DataContext.RemoveTaskCommand}" CommandParameter="{Binding}" DockPanel.Dock="Left" Margin="15 5">❌</Button>
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource taskListItemTemplate}"/>
+                    <TextBlock FontSize="14" Text="{Binding Description}" Style="{StaticResource taskListItemTemplate}"/>
+                    <TextBlock FontSize="14" Text="{Binding Deadline, StringFormat=Deadline : {0:dd.MM.yyyy}}"/>
+                    <TextBlock FontSize="14" Text="{Binding IsDone, StringFormat=Done : {0}}"/>
+                </StackPanel>
+            </DockPanel>
+        </DataTemplate>
+        <ControlTemplate x:Key="roundedButton" TargetType="Button">
+            <Border BorderThickness="3" BorderBrush="DeepSkyBlue" CornerRadius="2" Background="{TemplateBinding Background}">
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  Foreground="Black"
+                                   >
+                    <ContentPresenter/>
+                </TextBlock>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger  Property="IsMouseOver" Value="True">
+                    <Setter Property="FontSize" Value="20"></Setter>
+                    <Setter Property="Background" Value="Red"></Setter>
+                </Trigger>
+                <Trigger  Property="IsPressed" Value="True">
+                    <Setter Property="FontSize" Value="20"></Setter>
+                    <Setter Property="Background" Value="Green"></Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0">
+            <StackPanel.Background>
+                <RadialGradientBrush>
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FF0CA29C" Offset="0.736"/>
+                </RadialGradientBrush>
+            </StackPanel.Background>
+            <Label>
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="0.283"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+                <Label.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FF55CBC6" Offset="0.714"/>
+                    </LinearGradientBrush>
+                </Label.Background> Task name:
+            </Label>
+            <TextBox Text="{Binding TaskName, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="White" Offset="0.314"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+            </TextBox>
+            <Label>
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="White" Offset="0.23"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+                <Label.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="#FF0CA29C" Offset="0.404"/>
+                    </LinearGradientBrush>
+                </Label.Background> Task description:
+            </Label>
+            <TextBox Text="{Binding TaskDescription, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Height="100">
+                <TextBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="White" Offset="0.168"/>
+                    </LinearGradientBrush>
+                </TextBox.Background>
+            </TextBox>
+            <DatePicker SelectedDate="{Binding TaskDeadline}">
+                <DatePicker.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0.575"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </DatePicker.Foreground>
+                <DatePicker.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="#FF0CA29C" Offset="0.382"/>
+                    </LinearGradientBrush>
+                </DatePicker.Background>
+            </DatePicker>
+            <CheckBox IsChecked="{Binding TaskDone}" VerticalContentAlignment="Center" Background="{x:Null}">
+                <CheckBox.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="0.497"/>
+                    </LinearGradientBrush>
+                </CheckBox.Foreground> Done
+            </CheckBox>
+
+        </StackPanel>
+
+        <DockPanel Grid.Column="1" Grid.ColumnSpan="2">
+            <DockPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF0CA29C" Offset="0.034"/>
+                </LinearGradientBrush>
+            </DockPanel.Background>
+            <TextBlock 
+                Margin="5"
+                HorizontalAlignment="Center" 
+                DockPanel.Dock="Top" 
+                Text="{Binding ElementName=listBox, Path=Items.Count, StringFormat=Count : {0}}">
+                <TextBlock.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="0.276"/>
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="#FF00FFE8" Offset="0.991"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+            </TextBlock>
+            <ListBox 
+                x:Name="listBox"
+                SelectedItem="{Binding SelectedTask, Mode=TwoWay}" 
+                 ItemsSource="{Binding MyTasks}" Grid.Column="1" 
+                 ItemTemplate="{StaticResource taskListTemplate}">
+                <ListBox.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="White" Offset="0.081"/>
+                    </LinearGradientBrush>
+                </ListBox.Background>
+            </ListBox>
+        </DockPanel>
+        <Button Grid.Row="1" Command="{Binding AddTaskCommand}" 
+                Template="{StaticResource roundedButton}">Add</Button>
+
+        <Button Grid.Row="1" Grid.Column="2" Command="{Binding RemoveTaskCommand}"
+                CommandParameter="{Binding ElementName=listBox, Path=SelectedItem}"
+                Template="{StaticResource roundedButton}">Remove</Button>
+        <Button Grid.Row="1" Grid.Column="1" Command="{Binding EditTaskCommand}"
+                CommandParameter="{Binding ElementName=listBox, Path=SelectedItem}"
+                Template="{StaticResource roundedButton}">Edit</Button>
+    </Grid>
+</Window>
+
